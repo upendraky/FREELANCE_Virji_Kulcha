@@ -1,0 +1,30 @@
+model Order {
+  id            String           @id
+  orderNumber   String           @unique
+  customerName  String
+  customerPhone String
+  notes         String?
+  type          OrderType
+  status        OrderStatus
+
+  tableId       String?
+  restaurantId  String
+  acceptedById  String?
+
+  table         RestaurantTable? @relation(fields:[tableId], references:[id])
+  restaurant    Restaurant       @relation(fields:[restaurantId], references:[id])
+  acceptedBy    User?            @relation("AcceptedBy", fields:[acceptedById], references:[id])
+
+  items         OrderItem[]
+  payment       Payment?
+  bill          Bill?
+
+  total         Decimal
+  createdAt     DateTime
+  updatedAt     DateTime
+
+  @@index([orderNumber])
+  @@index([status])
+  @@index([restaurantId])
+  @@index([customerPhone])
+}
